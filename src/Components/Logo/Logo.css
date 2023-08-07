@@ -1,0 +1,16 @@
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+}
+
+.logo{
+    border-radius: 25%;
+    object-fit: contain;
+    object-position: center;
+    border-color: rgb(0, 0, 0);
+    border-style: solid;
+    mix-blend-mode:luminosity;
+}

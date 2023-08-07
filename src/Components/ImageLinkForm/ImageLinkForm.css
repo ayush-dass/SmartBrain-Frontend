@@ -1,0 +1,35 @@
+.link {
+    --height: 55px;
+    display: flex;
+    max-width: 580px;
+    padding: 5px;
+}
+
+.url-input {
+    flex-grow: 1;
+    padding: 0 8px;
+    border-style: none;
+    border-top-left-radius: 300px;
+    border-bottom-left-radius: 300px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.427);
+}
+
+.detect-button {
+    width: 80px;
+    height: var(--height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dddddde3;
+    outline: none;
+    border-style: none;
+    cursor: pointer;
+    border-top-right-radius: 300px;
+    border-bottom-right-radius: 300px;
+}
+
+::placeholder {
+    color: black;
+    opacity: 1;
+}
