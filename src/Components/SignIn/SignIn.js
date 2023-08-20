@@ -1,5 +1,7 @@
 import React from 'react'
 import './SignIn.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class SignIn extends React.Component {
 
@@ -33,6 +35,18 @@ class SignIn extends React.Component {
           this.props.loadUser(user);
           this.props.onRouteChange('home');
         }
+      })
+      .catch(() => {
+        toast.error('Wrong Credentials.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       })
   }
 
@@ -74,6 +88,7 @@ class SignIn extends React.Component {
                       value="Sign in"
                     />
                   </div>
+                  <ToastContainer />
                   <div className="lh-copy mt3">
                     <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
                   </div>

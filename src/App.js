@@ -171,7 +171,7 @@ class App extends Component {
   
     image.onerror = () => {
       // If the image fails to load, show an error message
-      toast.error('Failed to load the image from the provided URL.', {
+      toast.error('Failed to load the image.', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -198,7 +198,7 @@ class App extends Component {
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <ToastContainer/>
+              <ToastContainer style={{minWidth : "fit-content"}}/>
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
             </div>
           : (
