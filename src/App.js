@@ -9,6 +9,8 @@ import Rank from './Components/Rank/Rank';
 import Logo from './Components/Logo/Logo';
 import Navigation from './Components/Navigation/Navigation'; 
 import { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const returnClarifaiRequestOptions = (imageUrl) => {
   const PAT = '86543df9861a43beba21f9a46f27c05e';
@@ -122,11 +124,21 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
+    toast();
     const imageUrl = this.state.input.trim(); // Remove leading/trailing spaces
   
     if (!imageUrl) {
       // If the URL is empty, do not proceed
-      console.log('Please provide a valid image URL.');
+      toast.error('Please provide a valid image URL.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
       return;
     }
   
@@ -159,7 +171,17 @@ class App extends Component {
   
     image.onerror = () => {
       // If the image fails to load, show an error message
-      console.log('Failed to load the image from the provided URL.');
+      toast.error('Failed to load the image from the provided URL.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+  
     };
   };
 
@@ -176,6 +198,7 @@ class App extends Component {
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
               />
+              <ToastContainer />
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
             </div>
           : (
