@@ -198,7 +198,7 @@ class App extends Component {
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <ToastContainer style={{minWidth : "fit-content"}}/>
+              <ToastContainer style={{minWidth : "fit-content" , fontWeight: 'normal'}}/>
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
             </div>
           : (

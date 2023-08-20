@@ -21,41 +21,49 @@ class SignIn extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    toast();
-    try{
+    toast.dismiss();
+
+    if (this.state.signInEmail === '' || this.state.signInPassword === '') {
+      toast.error('Please fill in all fields',{ position: toast.POSITION.TOP_CENTER });
+      return;
+    }
+    
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(this.state.signInEmail)) {
+      toast.error('Invalid email format', { position: toast.POSITION.TOP_CENTER });
+      return;
+    }
+    
     fetch('https://smartbrain-backend-ehav.onrender.com/signin', {
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: this.state.signInEmail,
         password: this.state.signInPassword
       })
     })
-      .then(response => response.json())
-      .then(user => {
-        if(user.id) {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
-        }
-      })
-    } catch {
-        console.log("no credentials")
-        toast.error('Wrong Credentials.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
-    }
-  }
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(user => {
+      if (user.id) {
+        this.props.loadUser(user);
+        this.props.onRouteChange('home');
+      }
+    })
+    .catch(error => {
+      toast.error('Invalid email or password.',{ position: toast.POSITION.TOP_CENTER });
+    });
+}
 
   render() {
     const {onRouteChange} = this.props;
     return (
+      <div>
+      <ToastContainer style={{fontWeight: 'normal', minWidth: 'fit-content'}}/>
       <div className='pa3'>
           <div className="card br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
               <main className="pa4 black-80">
@@ -91,13 +99,13 @@ class SignIn extends React.Component {
                       value="Sign in"
                     />
                   </div>
-                  <ToastContainer />
                   <div className="lh-copy mt3">
                     <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
                   </div>
                 </div>
               </main>
           </div>
+      </div>
       </div>
     );
   }
