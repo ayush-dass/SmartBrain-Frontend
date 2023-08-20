@@ -124,21 +124,12 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    toast();
+    toast.dismiss();
     const imageUrl = this.state.input.trim(); // Remove leading/trailing spaces
   
     if (!imageUrl) {
       // If the URL is empty, do not proceed
-      toast.error('Please provide a valid image URL.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
+      toast.error('Please provide a valid image URL.',{ position: toast.POSITION.TOP_CENTER });
       return;
     }
   
@@ -171,16 +162,7 @@ class App extends Component {
   
     image.onerror = () => {
       // If the image fails to load, show an error message
-      toast.error('Failed to load the image.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
+      toast.error('Failed to load the image.',{ position: toast.POSITION.TOP_CENTER });
   
     };
   };
