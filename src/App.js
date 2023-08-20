@@ -137,7 +137,7 @@ class App extends Component {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
         });
       return;
     }
@@ -179,7 +179,7 @@ class App extends Component {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "light",
         });
   
     };
@@ -198,7 +198,7 @@ class App extends Component {
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
               />
-              <ToastContainer />
+              <ToastContainer style={{width: auto}}/>
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
             </div>
           : (
