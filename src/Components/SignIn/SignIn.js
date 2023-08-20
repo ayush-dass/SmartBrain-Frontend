@@ -21,6 +21,8 @@ class SignIn extends React.Component {
   }
 
   onSubmitSignIn = () => {
+    toast();
+    try{
     fetch('https://smartbrain-backend-ehav.onrender.com/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -36,7 +38,8 @@ class SignIn extends React.Component {
           this.props.onRouteChange('home');
         }
       })
-      .catch(() => {
+    } catch {
+        console.log("no credentials")
         toast.error('Wrong Credentials.', {
           position: "top-right",
           autoClose: 5000,
@@ -47,7 +50,7 @@ class SignIn extends React.Component {
           progress: undefined,
           theme: "light",
           });
-      })
+    }
   }
 
   render() {
