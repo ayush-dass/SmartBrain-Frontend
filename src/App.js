@@ -131,6 +131,8 @@ class App extends Component {
       toast.error('Please provide a valid image URL.', { position: toast.POSITION.TOP_CENTER });
       return;
     }
+
+    this.setState({ box: {} });
   
     const image = new Image();
     image.src = imageUrl;
@@ -141,10 +143,12 @@ class App extends Component {
       fetch("https://api.clarifai.com/v2/models/face-detection/outputs", returnClarifaiRequestOptions(imageUrl))
         .then(response => response.json())
         .then(response => {
-          if (response && response.outputs[0].data.regions) {
+          if (response && response.outputs[0].data.regions) 
+          {
             // Check if regions property is defined before accessing length
             const detectedFaces = response.outputs[0].data.regions;
-            if (detectedFaces.length > 0) {
+            if (detectedFaces.length > 0) 
+            {
               const totalFacesDetected = detectedFaces.length;
               toast.success(`${totalFacesDetected} face(s) detected in the image.`, { position: toast.POSITION.TOP_CENTER });              
               // Update the entry count
@@ -166,11 +170,15 @@ class App extends Component {
                 });
               
               this.displayFaceBox(this.calculateFaceLocation(response));
-            } else {
+            } 
+            else 
+            {
               // If no faces are detected, inform the user
               toast.info('No faces detected in the image.', { position: toast.POSITION.TOP_CENTER });
             }
-          } else {
+          } 
+          else 
+          {
             // If regions property is not defined, inform the user
             toast.info('No faces detected in the image.', { position: toast.POSITION.TOP_CENTER });
           }
