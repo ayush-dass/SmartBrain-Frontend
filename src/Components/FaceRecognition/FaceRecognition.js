@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FaceRecognition.css';
 
 const FaceRecognition = ({ imageUrl, box }) => {
   const [facesDetected, setFacesDetected] = useState(false);
+
+  useEffect(() => {
+    setFacesDetected(false); // Reset facesDetected when a new image is loaded
+  }, [imageUrl]);
 
   const renderBoundingBoxes = () => {
     if (facesDetected && box && box.length > 0) {
