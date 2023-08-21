@@ -58,7 +58,7 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: {},
-  route: 'signin',
+  route: 'home',
   isSignedIn: false,
   user: {
     id: '',
@@ -129,7 +129,7 @@ class App extends Component {
   
     if (!imageUrl) {
       // If the URL is empty, do not proceed
-      toast.error('Please provide a valid image URL.',{ position: toast.POSITION.TOP_CENTER });
+      toast.error('Please provide a valid image URL.', { position: toast.POSITION.TOP_CENTER });
       return;
     }
   
@@ -142,19 +142,38 @@ class App extends Component {
       fetch("https://api.clarifai.com/v2/models/face-detection/outputs", returnClarifaiRequestOptions(imageUrl))
         .then(response => response.json())
         .then(response => {
-          if (response) {
-            fetch('https://smartbrain-backend-ehav.onrender.com/image', {
-              method: 'put',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                id: this.state.user.id
+          if (response && response.outputs[0].data.regions) {
+            // Check if regions property is defined before accessing length
+            const detectedFaces = response.outputs[0].data.regions;
+            if (detectedFaces.length > 0) {
+              const totalFacesDetected = detectedFaces.length;
+              toast.success(`${totalFacesDetected} face(s) detected in the image.`, { position: toast.POSITION.TOP_CENTER });              
+              // Update the entry count
+              fetch('https://smartbrain-backend-ehav.onrender.com/image', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: this.state.user.id
+                })
               })
-            })
-              .then(response => response.json())
-              .then(count => {
-                this.setState(Object.assign(this.state.user, { entries: count }))
-              })
-            this.displayFaceBox(this.calculateFaceLocation(response))
+                .then(response => response.json())
+                .then(count => {
+                  this.setState(prevState => ({
+                    user: {
+                      ...prevState.user,
+                      entries: count
+                    }
+                  }));
+                });
+              
+              this.displayFaceBox(this.calculateFaceLocation(response));
+            } else {
+              // If no faces are detected, inform the user
+              toast.info('No faces detected in the image.', { position: toast.POSITION.TOP_CENTER });
+            }
+          } else {
+            // If regions property is not defined, inform the user
+            toast.info('No faces detected in the image.', { position: toast.POSITION.TOP_CENTER });
           }
         })
         .catch(err => console.log(err));
@@ -162,10 +181,10 @@ class App extends Component {
   
     image.onerror = () => {
       // If the image fails to load, show an error message
-      toast.error('Failed to load the image.',{ position: toast.POSITION.TOP_CENTER });
-  
+      toast.error('Failed to load the image.', { position: toast.POSITION.TOP_CENTER });
     };
-  };
+  };  
+
 
   render(){
     return(
