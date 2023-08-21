@@ -1,9 +1,11 @@
-import React from 'react'
-import './FaceRecognition.css'
+import React, { useState } from 'react';
+import './FaceRecognition.css';
 
 const FaceRecognition = ({ imageUrl, box }) => {
+  const [facesDetected, setFacesDetected] = useState(false);
+
   const renderBoundingBoxes = () => {
-    if (box && box.length > 0) {
+    if (facesDetected && box && box.length > 0) {
       return box.map((face, i) => (
         <div
           key={i}
@@ -29,6 +31,7 @@ const FaceRecognition = ({ imageUrl, box }) => {
           src={imageUrl}
           width="500px"
           heigh="auto"
+          onLoad={() => setFacesDetected(true)}
         />
         {renderBoundingBoxes()}
       </div>
@@ -36,5 +39,4 @@ const FaceRecognition = ({ imageUrl, box }) => {
   );
 };
 
-
-export default FaceRecognition
+export default FaceRecognition;
