@@ -20,44 +20,48 @@ class SignIn extends React.Component {
     this.setState({signInPassword: event.target.value})
   }
 
-  onSubmitSignIn = () => {
-    toast.dismiss();
+  onSubmitSignIn = async () => {
+  toast.dismiss();
 
-    if (this.state.signInEmail === '' || this.state.signInPassword === '') {
-      toast.error('Please fill in all fields',{ position: toast.POSITION.TOP_CENTER });
-      return;
-    }
-    
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(this.state.signInEmail)) {
-      toast.error('Invalid email format', { position: toast.POSITION.TOP_CENTER });
-      return;
-    }
-    
-    fetch('https://smartbrain-backend-ehav.onrender.com/signin', {
+  const { signInEmail, signInPassword } = this.state;
+
+  if (!signInEmail || !signInPassword) {
+    toast.error('Please fill in all fields', { position: toast.POSITION.TOP_CENTER });
+    return;
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(signInEmail)) {
+    toast.error('Invalid email format', { position: toast.POSITION.TOP_CENTER });
+    return;
+  }
+
+  try {
+    const response = await fetch('https://smartbrain-backend-ehav.onrender.com/signin', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword
+        email: signInEmail,
+        password: signInPassword
       })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(user => {
-      if (user.id) {
-        this.props.loadUser(user);
-        this.props.onRouteChange('home');
-      }
-    })
-    .catch(error => {
-      toast.error('Invalid email or password.',{ position: toast.POSITION.TOP_CENTER });
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const user = await response.json();
+    if (user.id) {
+      this.props.loadUser(user);
+      this.props.onRouteChange('home');
+    } else {
+      toast.error('Invalid email or password.', { position: toast.POSITION.TOP_CENTER });
+    }
+  } catch (error) {
+    toast.error('An error occurred. Please try again later.', { position: toast.POSITION.TOP_CENTER });
+  }
 }
+
 
   render() {
     const {onRouteChange} = this.props;
